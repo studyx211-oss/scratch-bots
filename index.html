@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" class="header-tabs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragment - Telegram Usernames</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-extra.css">
+    <link rel="stylesheet" href="css/font-roboto.css">
+    <link rel="stylesheet" href="css/auction.css">
+    <link rel="stylesheet" href="css/custom.css">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    
+    <style>
+        /* Fix font paths */
+        @font-face {
+            font-family: ProductSans;
+            font-display: swap;
+            font-style: normal;
+            font-weight: 400;
+            src: url(fonts/ProductSansRegular.ttf);
+        }
+        @font-face {
+            font-family: ProductSans;
+            font-display: swap;
+            font-style: bold;
+            font-weight: 600;
+            src: url(fonts/ProductSansBold.ttf);
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #4db2ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+        
+        .logo-icon:before {
+            content: "F";
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .menu-icon {
+            width: 22px;
+            height: 18px;
+            background-image: url("data:image/svg+xml,%3Csvg%20height%3D%2218%22%20viewBox%3D%220%200%2022%2018%22%20width%3D%2222%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m3%209h16m-16-6h16m-16%2012h16%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-linecap%3D%22round%22%20stroke-width%3D%221.73%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress bar for AJAX navigation -->
+    <div id="aj_progress"></div>
+    
+    <!-- Main content container for AJAX loading -->
+    <div id="aj_content">
+        <header class="header">
+            <div class="container">
+                <div class="header-inner">
+                    <div class="header-left">
+                        <a href="#" class="header-logo js-logo-clickable">
+                            <div class="logo-icon js-logo-icon"></div>
+                            <div class="header-logo-text">Fragment</div>
+                        </a>
+                        <nav class="header-nav">
+                            <a href="#" class="header-tab active">Usernames</a>
+                            <a href="#" class="header-tab">Numbers</a>
+                            <a href="#" class="header-tab">Collectibles</a>
+                        </nav>
+                    </div>
+                    <div class="header-right">
+                        <div class="header-buttons">
+                            <button class="btn btn-header js-menu-toggle">
+                                <span class="menu-icon"></span>
+                            </button>
+                            <button class="btn btn-primary js-auth-button">Connect Wallet</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="main">
+            <div class="container">
+                <div class="main-search-form js-main-search-form">
+                    <form action="/search" class="search-form">
+                        <div class="form-group">
+                            <input type="text" name="query" class="form-control" placeholder="Search usernames">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="main-filters js-main-filters">
+                    <div class="filters-header">
+                        <div class="filters-title">Filters</div>
+                        <div class="filters-actions">
+                            <button class="filters-action js-filters-reset">Reset</button>
+                        </div>
+                    </div>
+                    <div class="filters-body">
+                        <div class="filter-group">
+                            <div class="filter-label">Status</div>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="status" value="on_auction">
+                                    <span class="filter-option-text">On auction</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="status" value="on_sale">
+                                    <span class="filter-option-text">On sale</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <div class="filter-label">Length</div>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="length" value="3">
+                                    <span class="filter-option-text">3 characters</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="length" value="4">
+                                    <span class="filter-option-text">4 characters</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="length" value="5">
+                                    <span class="filter-option-text">5+ characters</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="auctions-section">
+                    <h2 class="section-title">Featured Auctions</h2>
+                    <div class="auctions-grid js-x-scrollable">
+                        <!-- Auction items will be loaded dynamically -->
+                        <div class="auction-item-placeholder">Loading auctions...</div>
+                    </div>
+                </div>
+                
+                <div class="collections-section">
+                    <h2 class="section-title">Collections</h2>
+                    <div class="collections-grid">
+                        <!-- Collection items will be loaded dynamically -->
+                        <div class="collection-item-placeholder">Loading collections...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-inner">
+                    <div class="footer-left">
+                        <div class="footer-logo">Fragment</div>
+                        <div class="footer-copyright">© 2023 Telegram FZ-LLC</div>
+                    </div>
+                    <div class="footer-right">
+                        <div class="footer-links">
+                            <a href="#" class="footer-link">Terms of Service</a>
+                            <a href="#" class="footer-link">Privacy Policy</a>
+                            <a href="#" class="footer-link">FAQ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        
+        <!-- Popups -->
+        <div class="popup js-popup" id="menu-popup">
+            <div class="popup-overlay js-popup-close"></div>
+            <div class="popup-container">
+                <div class="popup-header">
+                    <div class="popup-title">Menu</div>
+                    <button class="popup-close js-popup-close">&times;</button>
+                </div>
+                <div class="popup-body">
+                    <div class="menu-links">
+                        <a href="#" class="menu-link">Usernames</a>
+                        <a href="#" class="menu-link">Numbers</a>
+                        <a href="#" class="menu-link">Collectibles</a>
+                        <a href="#" class="menu-link">My Bids</a>
+                        <a href="#" class="menu-link">My Collection</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="popup js-popup" id="auth-popup">
+            <div class="popup-overlay js-popup-close"></div>
+            <div class="popup-container">
+                <div class="popup-header">
+                    <div class="popup-title">Connect Wallet</div>
+                    <button class="popup-close js-popup-close">&times;</button>
+                </div>
+                <div class="popup-body">
+                    <div class="wallet-options">
+                        <button class="wallet-option js-wallet-option" data-wallet="tonkeeper">
+                            <div class="wallet-option-icon">TK</div>
+                            <div class="wallet-option-name">Tonkeeper</div>
+                        </button>
+                        <button class="wallet-option js-wallet-option" data-wallet="tonhub">
+                            <div class="wallet-option-icon">TH</div>
+                            <div class="wallet-option-name">Tonhub</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery-ex.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/qr-code-styling.js"></script>
+    <script src="js/tgsticker.js"></script>
+    <script src="js/tonconnect-ui.min.js"></script>
+    <script src="js/auction.js"></script>
+    <script src="js/main-aj.js"></script>
+    
+    <script>
+    $(document).ready(function() {
+        // Initialize AJAX functionality
+        ajInit({
+            apiUrl: '/api',
+            version: '1.0',
+            layer: true,
+            layerUnderUrl: true
+        });
+        
+        // Initialize menu toggle
+        $('.js-menu-toggle').on('click', function() {
+            $('#menu-popup').addClass('active');
+        });
+        
+        // Initialize auth button
+        $('.js-auth-button').on('click', function() {
+            $('#auth-popup').addClass('active');
+        });
+        
+        // Initialize popup close
+        $('.js-popup-close').on('click', function() {
+            $(this).closest('.js-popup').removeClass('active');
+        });
+    });
+    </script>
+</body>
+</html>
